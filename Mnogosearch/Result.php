@@ -41,12 +41,12 @@ class Search_Mnogosearch_Result {
     * internal result set.
     * @access private
     */
-    var $_result;
+    private $result;
     /**
     * internal row counter.
     * @access private
     */
-    var $_i;
+    private $i;
 
     /**
     * Number of rows to display per page
@@ -61,7 +61,7 @@ class Search_Mnogosearch_Result {
     * Number of actual results
     * @access private
     */
-    var $_rows = 0;
+    private $rows = 0;
     /** 
     * The search query
     * @access private
@@ -78,12 +78,12 @@ class Search_Mnogosearch_Result {
      * @return void
      * @access private
      */
-    function Search_Mnogosearch_Result($result) 
+    function Search_Mnogosearch_Result(&$result) 
     {
-        $this->_result = $result;
-        $this->_i = 0;
-        $this->_rows = $result[SEARCH_MNOGOSEARCH_INFO_NUMROW];
-        $this->_query = $result['query'];
+        $this->result = $result;
+        $this->i = 0;
+        $this->rows = $this->getInfo(SEARCH_MNOGOSEARCH_INFO_NUMROW);
+        $this->_query = $this->getInfo('query');
         $this->results = $this->getInfo(SEARCH_MNOGOSEARCH_FOUND);
     } // end constructor 
 
@@ -94,10 +94,10 @@ class Search_Mnogosearch_Result {
      */
     function fetchRow() 
     {
-        if ($this->_i >= $this->_rows) {
+        if ($this->i >= $this->rows) {
             return false;
         }
-        return $this->_result['rows'][$this->_i++];
+        return $this->result['rows'][$this->i++];
     } // end func fetchRow
 
     /**
@@ -108,8 +108,8 @@ class Search_Mnogosearch_Result {
      * @access public
      */
     function getInfo($info) 
-    {
-        return $this->_result[$info];
+    {   
+        return $this->result[$info];
     } // end func getInfo
 
     /**
@@ -120,7 +120,7 @@ class Search_Mnogosearch_Result {
     */
     function numRows() 
     {
-        return $this->_rows;
+        return $this->rows;
     } // end func numRows
 
     /**
