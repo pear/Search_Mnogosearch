@@ -2,9 +2,8 @@
 <!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <package version="1.0">
   <name>Search_Mnogosearch</name>
-  <summary>mnoGoSearch Wrapper</summary>
-  <description>This package provides wrapper classes for the mnoGoSearch search 
-engine.</description>
+  <summary>Wrapper classes for the mnoGoSearch extention</summary>
+  <description>This package provides wrapper classes for the mnoGoSearch search engine. The package has two central classes &quot;Search_Mnogosearch&quot; and &quot;Search_Mnogosearch_Result&quot;. The class &quot;Search_Mnogosearch&quot; gives an object that represents the search and the &quot;Search_Mnogosearch_Result&quot; the result. The usage is just like the usage in the &quot;DB&quot; and &quot;DB_result&quot; classes.</description>
   <maintainers>
     <maintainer>
       <user>goetsch</user>
@@ -14,11 +13,11 @@ engine.</description>
     </maintainer>
   </maintainers>
   <release>
-    <version>0.0.3</version>
-    <date>2004-10-27</date>
-    <license>PHP License</license>
+    <version>0.1.0</version>
+    <date>2004-12-03</date>
+    <license>PHP License 2.02</license>
     <state>alpha</state>
-    <notes>Proposal version</notes>
+    <notes>First unstable release</notes>
     <deps>
       <dep type="php" rel="ge" version="5.0.0"/>
       <dep type="ext" rel="has">mnogosearch</dep>
@@ -32,6 +31,13 @@ engine.</description>
     <provides type="function" name="Search_Mnogosearch_Renderer::finishResult" />
     <provides type="function" name="Search_Mnogosearch_Renderer::startForm" />
     <provides type="function" name="Search_Mnogosearch_Renderer::finishForm" />
+    <provides type="class" name="Search_Mnogosearch_Result" />
+    <provides type="function" name="Search_Mnogosearch_Result::fetchRow" />
+    <provides type="function" name="Search_Mnogosearch_Result::getInfo" />
+    <provides type="function" name="Search_Mnogosearch_Result::numRows" />
+    <provides type="function" name="Search_Mnogosearch_Result::accept" />
+    <provides type="function" name="Search_Mnogosearch_Result::toHtml" />
+    <provides type="function" name="Search_Mnogosearch_Result::defaultRenderer" />
     <provides type="class" name="Search_Mnogosearch_Renderer_Default" extends="Search_Mnogosearch_Renderer" />
     <provides type="function" name="Search_Mnogosearch_Renderer_Default::renderRow" />
     <provides type="function" name="Search_Mnogosearch_Renderer_Default::startResult" />
@@ -55,24 +61,25 @@ engine.</description>
     <provides type="function" name="Search_Mnogosearch::setLimits" />
     <provides type="function" name="Search_Mnogosearch::setAutowild" />
     <provides type="function" name="Search_Mnogosearch::setHttpParameter" />
+    <provides type="function" name="Search_Mnogosearch::setResultFields" />
+    <provides type="function" name="Search_Mnogosearch::setSectionWeights" />
     <provides type="function" name="Search_Mnogosearch::setHttpParameters" />
     <provides type="function" name="Search_Mnogosearch::setParameter" />
     <filelist>
-      <file role="php" baseinstalldir="Search" md5sum="21d7dee45d81b145d9979c639e372a69" name="docs/examples.php"/>
-      <file role="data" baseinstalldir="Search" md5sum="c3b27495e6598e5f1b1e7030b5a6de90" name="docs/PHPLICENSE.txt"/>
-      <file role="data" baseinstalldir="Search" md5sum="62947076c8ec689c4c3e0c0f124fa720" name="docs/README"/>
-      <file role="php" baseinstalldir="Search" md5sum="9f007486700e275aef5b7dbe629ee01d" name="docs/search-example.php"/>
-      <file role="php" baseinstalldir="Search" md5sum="575f7ea236fa0529d606b6396ea81269" name="docs/sigma-example.php"/>
-      <file role="data" baseinstalldir="Search" md5sum="a960d96c0892ee703b498a29700bd5d8" name="docs/style.css"/>
+      <file role="doc" baseinstalldir="Search" md5sum="03c221af6e3a8744855c4386fbb2b31d" name="docs/examples.php"/>
+      <file role="doc" baseinstalldir="Search" md5sum="e67168ed070043b8191b4f58434a84c5" name="docs/search-example.php"/>
+      <file role="doc" baseinstalldir="Search" md5sum="f7055f6a9bb0c93edefbcfcbd71b6c20" name="docs/sigma-example.php"/>
+      <file role="doc" baseinstalldir="Search" md5sum="a960d96c0892ee703b498a29700bd5d8" name="docs/style.css"/>
       <file role="doc" baseinstalldir="Search" md5sum="e5fabb4741add351e9569b643f2b13a7" name="docs/renderers/templates/bygroup.html"/>
       <file role="doc" baseinstalldir="Search" md5sum="0b7b57f7a19180ed52a293f215a50bc2" name="docs/renderers/templates/noresult.html"/>
       <file role="doc" baseinstalldir="Search" md5sum="5dd4156fcdb9579fdf227e0b2060c127" name="docs/renderers/templates/result.html"/>
       <file role="doc" baseinstalldir="Search" md5sum="8beea50790adc3982fd2afedae845061" name="docs/renderers/templates/search.html"/>
       <file role="doc" baseinstalldir="Search" md5sum="9e7254f4187ecb1a2d2abf6203ee8227" name="docs/renderers/templates/searchform.html"/>
-      <file role="php" baseinstalldir="Search" md5sum="cf90b4d983e1d7da01a63043daf832e8" name="Mnogosearch/Renderer.php"/>
-      <file role="php" baseinstalldir="Search" md5sum="b02fc919e5548e6916341307f1c32356" name="Mnogosearch/Renderer/Default.php"/>
-      <file role="php" baseinstalldir="Search" md5sum="4520a6bfe01d34981727741e3afca2b9" name="Mnogosearch/Renderer/Sigma.php"/>
-      <file role="php" baseinstalldir="Search" md5sum="3e3ba1724a88022fa0cb44730024bfc0" name="Mnogosearch.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="cc6f493b2bebc7e68844de112ab589da" name="Mnogosearch/Renderer.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="e401c0eafee9a3c5c46d0e4d9470c644" name="Mnogosearch/Result.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="f1c4eb9181be457d5fe271b5f82d9857" name="Mnogosearch/Renderer/Default.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="2dd7819aeb05cfc9feb5ceb1903d96c0" name="Mnogosearch/Renderer/Sigma.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="472f7beea333475c32d9b6550b73f9ce" name="Mnogosearch.php"/>
     </filelist>
   </release>
   <changelog>
@@ -96,6 +103,13 @@ engine.</description>
       <license>PHP License</license>
       <state>alpha</state>
       <notes>Proposal version</notes>
+    </release>
+    <release>
+      <version>0.1.0</version>
+      <date>2004-12-03</date>
+      <license>PHP License 2.02</license>
+      <state>alpha</state>
+      <notes>First unstable release</notes>
     </release>
   </changelog>
 </package>
