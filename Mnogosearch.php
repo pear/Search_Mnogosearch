@@ -628,6 +628,9 @@ class Search_Mnogosearch {
         // Row specific info
 
         for ($i = 0; $i < $result[SEARCH_MNOGOSEARCH_INFO_NUMROW]; $i ++) {
+            if ($this->_getUdmParameter('excerptsize')>0){
+                udm_make_excerpt($this->agent, $res, $i);
+            }
             $row = array ();
             $row['rec_id']  = udm_get_res_field($res, $i, UDM_FIELD_URLID);
             $row['ndoc']    = udm_get_res_field($res, $i, UDM_FIELD_ORDER);
