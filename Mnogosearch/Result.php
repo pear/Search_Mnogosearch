@@ -160,12 +160,12 @@ class Search_Mnogosearch_Result {
      */
     function defaultRenderer() 
     {
-        if (!isset ($GLOBALS['_Search_Mnogosearch_default_renderer'])) {
+        if (!isset ($GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'])) {
             include_once ('Search/Mnogosearch/Renderer/Default.php');
-            $GLOBALS['_Search_Mnogosearch_default_renderer'] = 
+            $GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'] = 
                 & new Search_Mnogosearch_Renderer_Default();
         }
-        return $GLOBALS['_Search_Mnogosearch_default_renderer'];
+        return $GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'];
     } // end func defaultRenderer
 
 } // end class Result_Mnogosearch

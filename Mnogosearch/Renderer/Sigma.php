@@ -56,7 +56,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
     * The template variable names.
     * @access private
     */
-    var $_variable_names = array (
+    var $_variable_names = array(
         'contentmain' => 'contentmain', 
         'contenttop'  => 'contenttop', 
         'query'       => 'query', 
@@ -78,7 +78,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
     * The template names to use.
     * @access private
     */
-    var $_templates = array (
+    var $_templates = array(
         'groupbysite'  => 'groupbysite.html', 
         'single'       => 'single.html', 
         'noresult'     => 'noresult.html', 
@@ -89,7 +89,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
      * The http parameter names
      * @access private
      */
-    var $_http_parameters = array ();
+    var $_http_parameters = array();
 
     /**
      * The query
@@ -240,14 +240,14 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
         $this->_http_parameters = $agent->_http_parameters;
 
         $this->_form = & new HTML_QuickForm('search', 'GET');
-        $this->_form->addElement('text', $this->_http_parameters['query'], _("Volltextsuche"), array ('maxlength' => '200', 'class' => 'formFieldLong'));
+        $this->_form->addElement('text', $this->_http_parameters['query'], _("Volltextsuche"), array('maxlength' => '200', 'class' => 'formFieldLong'));
         $this->_form->addElement('submit', 'button', 'Search');
         $this->_form->addElement('checkbox', 'group', _("Group"), 'Group by site');
 
         if (isset ($_GET[$this->_http_parameters['group']]) && $_GET[$this->_http_parameters['group']] == "1") {
-            $this->_form->setConstants(array ("group" => "1"));
+            $this->_form->setConstants(array("group" => "1"));
         } else {
-            $this->_form->setConstants(array ("group" => "0"));
+            $this->_form->setConstants(array("group" => "0"));
         }
 
         return;
@@ -279,7 +279,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
      * @access   public
      * @return   void
      */
-    function setVariableNames($names = array ()) 
+    function setVariableNames($names = array()) 
     {
         foreach ($names as $name => $value) {
             $this->_variable_names[$name] = $value;
@@ -293,7 +293,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
      * @access   public
      * @return   void
      */
-    function setPagerOptions($options = array ()) 
+    function setPagerOptions($options = array()) 
     {
         foreach ($options as $name => $value) {
             $this->_pager_params[$name] = $value;
@@ -307,7 +307,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
      * @access   public
      * @return   void
      */
-    function setTemplates($tpls = array ()) 
+    function setTemplates($tpls = array()) 
     {
         foreach ($tpls as $tpl => $value) {
             $this->_templates[$tpl] = $value;
@@ -350,8 +350,9 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
      */
     function _highlightText($text = '') 
     {
-        if ($text == '')
+        if ($text == '') {
             return '';
+        }
         $str = $text;
 
         $str = str_replace("\2", $this->_hlbeg, $str);

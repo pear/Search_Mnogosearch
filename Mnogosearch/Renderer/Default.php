@@ -493,7 +493,7 @@ class Search_Mnogosearch_Renderer_Default extends Search_Mnogosearch_Renderer
     {
         
         $select = "<select name=\"$name\">";
-        foreach($values as $text => $value) {
+        foreach ($values as $text => $value) {
             $selected = '';   
 
             if (isset($_GET[$name]) && $_GET[$name]==$value) {

@@ -38,23 +38,23 @@ $GLOBALS['_SEARCH_MNOGOSEARCH_PARAMETERS'] = array(
     'pagesize'        => 20, 
     'pagenumber'      => 0,
     'queryParameter'  => 'q', 
-    'mode'            => array (
+    'mode'            => array(
         'any'     => 'UDM_MODE_ANY', 
         'bool'    => 'UDM_MODE_BOOL', 
         'phrase'  => 'UDM_MODE_PHRASE', 
         'all'     => 'UDM_MODE_ALL'
     ), 
-    'wordmatch'       => array (
+    'wordmatch'       => array(
         'wrd'     => 'UDM_MATCH_WORD', 
         'beg'     => 'UDM_MATCH_BEGIN', 
         'end'     => 'UDM_MATCH_END', 
         'sub'     => 'UDM_MATCH_SUBSTR'
     ), 
-    'phrasemode'      => array (
+    'phrasemode'      => array(
         'yes'     => 'UDM_ENABLED', 
         'no'      => 'UDM_DISABLED'
     ), 
-    'groupbysite'     => array (
+    'groupbysite'     => array(
         'yes'     => 'UDM_ENABLED', 
         'no'      => 'UDM_DISABLED'
     )        
@@ -65,7 +65,7 @@ $GLOBALS['_SEARCH_MNOGOSEARCH_PARAMETERS'] = array(
  * @global array $GLOBALS['_SEARCH_MNOGOSEARCH_LIMITS'] 
  * @name $_SEARCH_MNOGOSEARCH_LIMITS
  */
-$GLOBALS['_SEARCH_MNOGOSEARCH_LIMITS'] = array (
+$GLOBALS['_SEARCH_MNOGOSEARCH_LIMITS'] = array(
     'url'      => 'setLimitUrl', 
     'tag'      => 'setLimit', 
     'category' => 'setLimit', 
@@ -154,7 +154,7 @@ class Search_Mnogosearch {
     /**
     * Array of words from the query
     */
-    var $words = array ();
+    var $words = array();
 
     /**
     * Beginning HTML tag for word highlight
@@ -193,7 +193,7 @@ class Search_Mnogosearch {
     * mapping for the UDM parameters 
     * @access private
     */
-    var $_udm_parameter_mapping = array (
+    var $_udm_parameter_mapping = array(
         'pagenumber'       => UDM_PARAM_PAGE_NUM, 
         'synonym'          => UDM_PARAM_SYNONYM, 
         'detectclones'     => UDM_PARAM_DETECT_CLONES, 
@@ -241,7 +241,7 @@ class Search_Mnogosearch {
     * mapping for the UDM limit parameters 
     * @access private
     */
-    var $_udm_limit_mapping = array (
+    var $_udm_limit_mapping = array(
         'category' => UDM_LIMIT_CAT, 
         'tag'      => UDM_LIMIT_TAG, 
         'url'      => UDM_LIMIT_URL, 
@@ -254,7 +254,7 @@ class Search_Mnogosearch {
     * The http parameters 
     * @access private
     */
-    var $_http_parameters = array (
+    var $_http_parameters = array(
         'query'    => 'query', 
         'page'     => 'page', 
         'group'    => 'group', 
@@ -301,7 +301,7 @@ class Search_Mnogosearch {
     * @return Search_Mnogosearch    new object of this class.
     * @access public
     */
-    function connect($DBAddr, $DBMode = '', $params = array ()) 
+    function connect($DBAddr, $DBMode = '', $params = array()) 
     {
         @ $obj = & new Search_Mnogosearch();
         if (preg_match(
@@ -309,8 +309,7 @@ class Search_Mnogosearch {
                 $DBAddr, $match)) {
             $obj->DBAddr = $match[1];
             $obj->DBMode = $match[2];
-        }
-        elseif ($DBAddr != '' && $DBMode != '') {
+        } elseif ($DBAddr != '' && $DBMode != '') {
             $obj->DBAddr = $DBAddr;
             $obj->DBMode = $DBMode;
         }
@@ -335,7 +334,7 @@ class Search_Mnogosearch {
     * @return void
     * @access public
     */
-    function setParameters($params = array ()) 
+    function setParameters($params = array()) 
     {
         foreach ($params as $key => $value) {
             $this->setParameter($key, $value);
@@ -348,7 +347,7 @@ class Search_Mnogosearch {
     * @return void
     * @access public
     */
-    function setLimits($limits = array ()) 
+    function setLimits($limits = array()) 
     {
         foreach ($limits as $key => $value) {
             $this->setLimit($key, $value);
@@ -424,7 +423,7 @@ class Search_Mnogosearch {
      * @access public
      * @return void
      */
-    function setResultFields($fields = array ()) 
+    function setResultFields($fields = array()) 
     {
         if (is_array($fields)) {
             $this->_fields = $fields;
@@ -476,7 +475,7 @@ class Search_Mnogosearch {
      * @access public
      * @return void
      */
-    function setHttpParameters($params = array ()) 
+    function setHttpParameters($params = array()) 
     {
         foreach ($params as $name => $value) {
             $this->setHttpParameter($name, $value);
@@ -561,13 +560,11 @@ class Search_Mnogosearch {
     {
         if ($query == '') {
             // if no query, try to get 'q' variable from request
-            if (isset ($_POST[$this->_http_parameters['query']])) {
+            if (isset($_POST[$this->_http_parameters['query']])) {
                 $query = $_POST[$this->_http_parameters['query']];
-            }
-            elseif (isset ($_GET[$this->_http_parameters['query']])) {
+            } elseif (isset($_GET[$this->_http_parameters['query']])) {
                 $query = $_GET[$this->_http_parameters['query']];
-            }
-            else {
+            } else {
                 PEAR::raiseError(
                     "Query is empty.", 
                     SEARCH_MNOGOSEARCH_ERROR_NOQUERY, PEAR_ERROR_RETURN);
@@ -579,10 +576,9 @@ class Search_Mnogosearch {
         udm_set_agent_param($this->agent, UDM_PARAM_QUERY, $this->query);
         $queryString = '';
         if ($queryString == '') {
-            if (isset ($_SERVER['QUERY_STRING'])) {
+            if (isset($_SERVER['QUERY_STRING'])) {
                 $queryString = $_SERVER['QUERY_STRING'];
-            }
-            elseif (isset ($_SERVER['argv'][0])) {
+            } elseif (isset($_SERVER['argv'][0])) {
                 $queryString = $_SERVER['argv'][0];
             }
             udm_set_agent_param($this->agent, UDM_PARAM_QSTRING, $queryString);
@@ -601,12 +597,11 @@ class Search_Mnogosearch {
                 $error, SEARCH_MNOGOSEARCH_ERROR_DB, PEAR_ERROR_RETURN);
         }
         $found = udm_get_res_param($res, UDM_PARAM_FOUND);
-        $result = array ();
+        $result = array();
         if (!$found) {
             udm_free_res($res);
             return false;
-        }
-        else {
+        } else {
             $result[SEARCH_MNOGOSEARCH_FOUND] = $found;
         }
 
@@ -631,7 +626,7 @@ class Search_Mnogosearch {
             if ($this->_getUdmParameter('excerptsize')>0){
                 udm_make_excerpt($this->agent, $res, $i);
             }
-            $row = array ();
+            $row = array();
             $row['rec_id']  = udm_get_res_field($res, $i, UDM_FIELD_URLID);
             $row['ndoc']    = udm_get_res_field($res, $i, UDM_FIELD_ORDER);
             $row['rating']  = udm_get_res_field($res, $i, UDM_FIELD_RATING);
@@ -683,19 +678,17 @@ class Search_Mnogosearch {
             $paramName = $key;
             $defaultValue = $value[$paramName];
 
-            if (isset ($options[$key])) {
+            if (isset($options[$key])) {
                 $submitVal = $options[$key];
                 if (is_array($defaultValue)) {
-                    if (isset ($defaultValue[$submitVal])) {
+                    if (isset($defaultValue[$submitVal])) {
                         $this->setParameter(
                             $paramName, $defaultValue[$submitVal]);
-                    }
-                    else {
+                    } else {
                         $this->setParameter(
                             $paramName, $defaultValue[0]); // default
                     }
-                }
-                else {
+                } else {
                     $this->setParameter($paramName, $submitVal);
                 }
             }
@@ -708,12 +701,11 @@ class Search_Mnogosearch {
             $limitName = $key;
             $methodName = $value[$limitName];
 
-            if (isset ($options[$key])) {
+            if (isset($options[$key])) {
                 $submitVal = $options[$key];
                 if ($methodeName = 'setLimit') {
                     $this-> $methodName ($limitName, $submitVal);
-                }
-                else {
+                } else {
                     $this-> $methodName ($submitVal);
                 }
             }
@@ -739,11 +731,11 @@ class Search_Mnogosearch {
     {
         $constant = UDM_LIMIT_DATE;
         if (is_array($value)) {
-            if (isset ($value['begin'])) {
+            if (isset($value['begin'])) {
                 udm_add_search_limit(
                     $this->agent, $constant, '>'.$value['begin']);
             }
-            if (isset ($value['end'])) {
+            if (isset($value['end'])) {
                 udm_add_search_limit(
                     $this->agent, $constant, '<'.$value['end']);
             }
@@ -767,17 +759,14 @@ class Search_Mnogosearch {
                     if (preg_match('/^(http|https|news|ftp):\/\/(.*)/i', $url, $match)) {
                         $url = strtolower($match[1]).'://'.$match[2].'%';
                         udm_add_search_limit($this->agent, $constant, $url);
-                    }
-                    else {
+                    } else {
                         udm_add_search_limit($this->agent, $constant, '%'.$url.'%');
                     }
                 }
-            }
-            else {
+            } else {
                 udm_add_search_limit($this->agent, $constant, $url);
             }
-        }
-        else {
+        } else {
             udm_add_search_limit($this->agent, $constant, $value);
         }
     } // end func setLimitUrl
@@ -797,8 +786,7 @@ class Search_Mnogosearch {
             foreach ($value as $limit) {
                 udm_add_search_limit($this->agent, $constant, $limit);
             }
-        }
-        else {
+        } else {
             udm_add_search_limit($this->agent, $constant, $value);
         }
     } // end func setLimit
@@ -815,17 +803,17 @@ class Search_Mnogosearch {
     {
         $query = urldecode($query);
         if ($this->_autoParse) {
-            foreach($this->_query_replacements['and'] as $name) {
+            foreach ($this->_query_replacements['and'] as $name) {
                 $query = str_replace(' '.$name.' ', '&', $query);
             }
             $query = str_replace('&', ' & ', $query);
-            foreach($this->_query_replacements['or'] as $name) {
+            foreach ($this->_query_replacements['or'] as $name) {
                 $query = str_replace(' '.$name.' ', '|', $query);
             }
             $query = str_replace('|', ' | ', $query);
             $query = preg_replace('/\s-(.*)/', '~\1', $query);
             $query = preg_replace('/^-(.*)/', '~\1', $query);
-            foreach($this->_query_replacements['not'] as $name) {
+            foreach ($this->_query_replacements['not'] as $name) {
                 $query = str_replace(' '.$name.' ', '~', $query);
             }
             $query = str_replace('~', ' ~ ', $query);            
@@ -871,10 +859,10 @@ class Search_Mnogosearch {
         // pagenumber
         $this->_processParameter('pagenumber', 'page');
         // groupby
-        if (!isset ($_POST[$this->_http_parameters['siteid']]) &&
-            !isset ($_GET[$this->_http_parameters['siteid']]) &&
-            !isset ($_POST[$this->_http_parameters['tag']]) &&
-            !isset ($_GET[$this->_http_parameters['tag']])) {
+        if (!isset($_POST[$this->_http_parameters['siteid']]) &&
+            !isset($_GET[$this->_http_parameters['siteid']]) &&
+            !isset($_POST[$this->_http_parameters['tag']]) &&
+            !isset($_GET[$this->_http_parameters['tag']])) {
             $this->_processParameter('groupbysite', 'group');
         }
         
@@ -908,13 +896,12 @@ class Search_Mnogosearch {
      */
     function _processParameter($param, $name) 
     {
-        if (isset ($_POST[$this->_http_parameters[$name]])) {
+        if (isset($_POST[$this->_http_parameters[$name]])) {
             $value = $_POST[$this->_http_parameters[$name]];
-        }
-        elseif (isset ($_GET[$this->_http_parameters[$name]])) {
+        } elseif (isset($_GET[$this->_http_parameters[$name]])) {
             $value = $_GET[$this->_http_parameters[$name]];
         }
-        if (isset ($value)) {
+        if (isset($value)) {
             // Pager fix
             if ($name == 'page') {
                 // Mnogosearch use 0 as first page
@@ -938,13 +925,12 @@ class Search_Mnogosearch {
      */
     function _processLimit($param, $name) 
     {
-        if (isset ($_POST[$this->_http_parameters[$name]])) {
+        if (isset($_POST[$this->_http_parameters[$name]])) {
             $value = $_POST[$this->_http_parameters[$name]];
-        }
-        elseif (isset ($_GET[$this->_http_parameters[$name]])) {
+        } elseif (isset($_GET[$this->_http_parameters[$name]])) {
             $value = $_GET[$this->_http_parameters[$name]];
         }
-        if (isset ($value)) {
+        if (isset($value)) {
             $this->setLimit($param, $value);
         }
     } // end func processLimit
@@ -992,12 +978,12 @@ class Search_Mnogosearch {
      */
     function defaultRenderer() 
     {
-        if (!isset ($GLOBALS['_Search_Mnogosearch_default_renderer'])) {
+        if (!isset($GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'])) {
             include_once 'Search/Mnogosearch/Renderer/Default.php';
-            $GLOBALS['_Search_Mnogosearch_default_renderer'] = 
+            $GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'] = 
                 & new Search_Mnogosearch_Renderer_Default();
         }
-        return $GLOBALS['_Search_Mnogosearch_default_renderer'];
+        return $GLOBALS['_SEARCH_MNOGOSEARCH_DEFAULT_RENDERER'];
     } // end func defaultRenderer
 
     /**
@@ -1007,13 +993,13 @@ class Search_Mnogosearch {
      * @return void
      */
     function addLogicOperators($operators = array()) {
-        foreach($operators['and'] as $op) {
+        foreach ($operators['and'] as $op) {
             $this->_query_replacements['and'][] = $op;            
         }
-        foreach($operators['or'] as $op) {
+        foreach ($operators['or'] as $op) {
             $this->_query_replacements['or'][] = $op;            
         }
-        foreach($operators['not'] as $op) {
+        foreach ($operators['not'] as $op) {
             $this->_query_replacements['not'][] = $op;            
         }
     } // end func addLogicOperators
