@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
+<package version="1.0">
+  <name>Search_Mnogosearch</name>
+  <summary>mnoGoSearch Wrapper</summary>
+  <description>This package provides wrapper classes for the mnoGoSearch search 
+engine.</description>
+  <maintainers>
+    <maintainer>
+      <user>goetsch</user>
+      <name>Gerrit Goetsch</name>
+      <email>goetsch@cross-solution.de</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+  <release>
+    <version>0.0.3</version>
+    <date>2004-10-27</date>
+    <license>PHP License</license>
+    <state>alpha</state>
+    <notes>Proposal version</notes>
+    <deps>
+      <dep type="php" rel="ge" version="5.0.0"/>
+      <dep type="ext" rel="has">mnogosearch</dep>
+      <dep type="pkg" rel="ge" version="3.2.3" optional="yes">HTML_QuickForm</dep>
+      <dep type="pkg" rel="ge" version="1.1.1" optional="yes">HTML_Template_Sigma</dep>
+      <dep type="pkg" rel="ge" version="2.2.3" optional="yes">Pager</dep>
+    </deps>
+    <provides type="class" name="Search_Mnogosearch_Renderer" />
+    <provides type="function" name="Search_Mnogosearch_Renderer::renderRow" />
+    <provides type="function" name="Search_Mnogosearch_Renderer::startResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer::finishResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer::startForm" />
+    <provides type="function" name="Search_Mnogosearch_Renderer::finishForm" />
+    <provides type="class" name="Search_Mnogosearch_Renderer_Default" extends="Search_Mnogosearch_Renderer" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::renderRow" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::startResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::finishResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::startForm" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::finishForm" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Default::toHtml" />
+    <provides type="class" name="Search_Mnogosearch_Renderer_Sigma" extends="Search_Mnogosearch_Renderer" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::renderRow" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::startResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::finishResult" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::startForm" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::finishForm" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::setVariableNames" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::setPagerOptions" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::setTemplates" />
+    <provides type="function" name="Search_Mnogosearch_Renderer_Sigma::setHighlightTags" />
+    <provides type="class" name="Search_Mnogosearch" />
+    <provides type="function" name="Search_Mnogosearch::connect" />
+    <provides type="function" name="Search_Mnogosearch::setParameters" />
+    <provides type="function" name="Search_Mnogosearch::setLimits" />
+    <provides type="function" name="Search_Mnogosearch::setAutowild" />
+    <provides type="function" name="Search_Mnogosearch::setHttpParameter" />
+    <provides type="function" name="Search_Mnogosearch::setHttpParameters" />
+    <provides type="function" name="Search_Mnogosearch::setParameter" />
+    <filelist>
+      <file role="php" baseinstalldir="Search" md5sum="21d7dee45d81b145d9979c639e372a69" name="docs/examples.php"/>
+      <file role="data" baseinstalldir="Search" md5sum="c3b27495e6598e5f1b1e7030b5a6de90" name="docs/PHPLICENSE.txt"/>
+      <file role="data" baseinstalldir="Search" md5sum="62947076c8ec689c4c3e0c0f124fa720" name="docs/README"/>
+      <file role="php" baseinstalldir="Search" md5sum="9f007486700e275aef5b7dbe629ee01d" name="docs/search-example.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="575f7ea236fa0529d606b6396ea81269" name="docs/sigma-example.php"/>
+      <file role="data" baseinstalldir="Search" md5sum="a960d96c0892ee703b498a29700bd5d8" name="docs/style.css"/>
+      <file role="doc" baseinstalldir="Search" md5sum="e5fabb4741add351e9569b643f2b13a7" name="docs/renderers/templates/bygroup.html"/>
+      <file role="doc" baseinstalldir="Search" md5sum="0b7b57f7a19180ed52a293f215a50bc2" name="docs/renderers/templates/noresult.html"/>
+      <file role="doc" baseinstalldir="Search" md5sum="5dd4156fcdb9579fdf227e0b2060c127" name="docs/renderers/templates/result.html"/>
+      <file role="doc" baseinstalldir="Search" md5sum="8beea50790adc3982fd2afedae845061" name="docs/renderers/templates/search.html"/>
+      <file role="doc" baseinstalldir="Search" md5sum="9e7254f4187ecb1a2d2abf6203ee8227" name="docs/renderers/templates/searchform.html"/>
+      <file role="php" baseinstalldir="Search" md5sum="cf90b4d983e1d7da01a63043daf832e8" name="Mnogosearch/Renderer.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="b02fc919e5548e6916341307f1c32356" name="Mnogosearch/Renderer/Default.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="4520a6bfe01d34981727741e3afca2b9" name="Mnogosearch/Renderer/Sigma.php"/>
+      <file role="php" baseinstalldir="Search" md5sum="3e3ba1724a88022fa0cb44730024bfc0" name="Mnogosearch.php"/>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+      <version>0.0.1</version>
+      <date>2004-10-15</date>
+      <license>PHP License</license>
+      <state>alpha</state>
+      <notes>Draft version</notes>
+    </release>
+    <release>
+      <version>0.0.2</version>
+      <date>2004-10-19</date>
+      <license>PHP License</license>
+      <state>alpha</state>
+      <notes>Draft version</notes>
+    </release>
+    <release>
+      <version>0.0.3</version>
+      <date>2004-10-27</date>
+      <license>PHP License</license>
+      <state>alpha</state>
+      <notes>Proposal version</notes>
+    </release>
+  </changelog>
+</package>

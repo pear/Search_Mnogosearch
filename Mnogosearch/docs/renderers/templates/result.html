@@ -1,0 +1,65 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td width="18%"> 
+      <table width="17%" border="0" cellspacing="0" cellpadding="1">
+        <tr> 
+          <td bgcolor="#339900"> 
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+              <tr> 
+                <td>&nbsp;<font size="2" face="Arial, Helvetica, sans-serif"><b>Query:</b></font>&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+          <td bgcolor="#339900" nowrap>&nbsp;<font face="Arial, Helvetica, sans-serif" size="2">
+            <b><font color="#FFFFFF">{query}</font></b></font>&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br>
+<table width="100%" valign="top" class="results2">
+ <tr class="header">
+  <td colspan="3">
+   <table cellspacing="0" cellpadding="0" width="100%">
+    <tr>
+     <td width="50%">
+      <font size="2"><b><font color="#FFFFFF" face="Arial, Helvetica, sans-serif">Results:
+            {from}-{to}<font size="1"> [of {totalItems}]</font></font></b></font></td>
+      <td align="right" width="50%"><b><font color="#FFFFFF" face="Arial, Helvetica, sans-serif"></font></b>
+      </td>
+     </tr>
+    </table>
+  </td>
+  </tr>
+<!-- BEGIN added_block -->
+<tr>
+  <td colspan="3" class="bg1">
+    <table cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+       <td width="100%"> <a href="{link}" TARGET="_blank">{title}</a></td>
+       <td valign="top" nowrap=""><font size="2">{date}</font></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td colspan="3" class="bg2">
+     {description}...
+  </td>
+</tr>
+
+<!-- END added_block -->
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr bgcolor="#EEEEEE">
+    <td width="10%"><font size="2" face="Arial, Helvetica, sans-serif">Pages:</font><br>
+    </td>
+    <td><table cellspacing="0"><tr><td><nobr>{pages}</nobr></td></tr></table></td>
+  </tr>
+  <tr bgcolor="#EEEEEE">
+    <td colspan="3" bgcolor="#339900"></td>
+    <td width="73%"></td>
+  </tr>
+</table>
+<p class="time">Search time was <b>{searchtime}</b> seconds | realized by <a href="http://cross-solution.de" target="_blank">cross</a></p>
