@@ -12,7 +12,7 @@ print "
 
 print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=1\">Example with default Renderer</a><br/>\n";
 print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=2\">Example with Sigma Renderer</a><br/>\n";
-print "<a href=\"http://jobs.open-hr.org\">german Jobsearch Engine</a><br/>\n";
+print "<a href=\"http://ohrwurm.net\">german Jobsearch Engine</a><br/>\n";
 
 if (isset($_GET['demo'])) {
     $demo = $_GET['demo'];
