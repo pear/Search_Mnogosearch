@@ -3,7 +3,7 @@
 * Example usage for Search_Mnogosearch renderer
 * with Sigma Templates and Pager.
 *
-* @author         Gerrit Goetsch <goetsch@cross-solution.de>
+* @author Gerrit Goetsch <goetsch@cross-solution.de>
 * 
 * $Id$
 */
@@ -43,29 +43,50 @@ $limits = array ();
 // create a new Search_Mnogosearch Object    
 $search = Search_Mnogosearch::connect(DSN_MNOGOSEARCH."/?dbmode=multi");
 // set the http parameters if you want.
-$search->setHttpParameters(array ('page'    => 'page', 
-                                  'group'   => 'group',   
-                                  'query'   => 'words'));
+$search->setHttpParameters(array (
+    'page'    => 'page', 
+    'group'   => 'group',   
+    'query'   => 'words'
+));
+
 // set the parameters
 $search->setParameters($params);
 $search->setLimits($limits);
 
 $sigma = new Search_Mnogosearch_Renderer_Sigma($tpl);
-$sigma->setVariableNames(array ('contentmain'   => 'contentmain', 
-                                'query'         => 'query', 
-                                'date'          => 'date'));
+$sigma->setVariableNames(array (
+    'contentmain'   => 'contentmain',
+    'query'         => 'query',
+    'date'          => 'date'
+));
+
 // set the template to use
-$sigma->setTemplates(array ('groupbysite'   => 'bygroup.html', 
-                            'single'        => 'result.html', 
-                            'noresult'      => 'noresult.html'));
+$sigma->setTemplates(array (
+    'groupbysite'   => 'bygroup.html', 
+    'single'        => 'result.html', 
+    'noresult'      => 'noresult.html'
+));
+
 // set the pager options
-$sigma->setPagerOptions(array ('firstPageText' => '<< ', 
-                               'lastPageText'  => ' >>', 
-                               'nextImg'       => ' >', 
-                               'prevImg'       => '< '));
-                         
-$sigma->setHighlightTags(array('begin'  => '<font color="#003300"><b>',
-                               'end'    => '</b></font>'));
+$sigma->setPagerOptions(array (
+    'firstPageText' => '<< ', 
+    'lastPageText'  => ' >>', 
+    'nextImg'       => ' >', 
+    'prevImg'       => '< '
+));
+
+// set section weight factors
+$search->setSectionWeights(array(
+    1 => '1',   // body
+    2 => '2',   // title
+    3 => '2',   // keywords
+    5 => '4'    // Organization (custom) 
+));
+
+$sigma->setHighlightTags(array(
+    'begin'  => '<font color="#003300"><b>',
+    'end'    => '</b></font>'));
+    
 $search->accept($sigma);
 
 $search->disconnect();

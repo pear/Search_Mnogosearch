@@ -2,7 +2,7 @@
 /**
 * Example usage for Pear class Search_Mnogosearch
 *
-* @author         Gerrit Goetsch <goetsch@cross-solution.de>
+* @author Gerrit Goetsch <goetsch@cross-solution.de>
 * 
 * $Id$
 */
@@ -31,13 +31,19 @@ $search = Search_Mnogosearch::connect(DSN_MNOGOSEARCH."/?dbmode=multi");
 $search->setParameters($params);
 
 // set the http parameters if you want.
-$search->setHttpParameters(array ('page'    => 'page', 
-                                  'group'   => 'group',   
-                                  'query'   => 'words'));
+$search->setHttpParameters(array (
+    'page'    => 'page', 
+    'group'   => 'group',   
+    'query'   => 'words'
+));
      
-$search->addLogicOperators(array('and' => array('und','Und','UND'),
-                                 'or'  => array('oder','Oder','ODER'),
-                                 'not' => array('nicht','Nicht','NICHT'),));                             
+$search->addLogicOperators(array(
+    'and' => array('und','Und','UND'),
+    'or'  => array('oder','Oder','ODER'),
+    'not' => array('nicht','Nicht','NICHT')
+));
+
+                           
 print $search->toHtml();
 
 ?>

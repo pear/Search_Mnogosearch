@@ -169,6 +169,12 @@ class Search_Mnogosearch {
     var $_hlend = '</strong>';
 
     /**
+    * Additional fields
+    * @access private
+    */
+    var $_fields = array();
+    
+    /**
     * Is the search mode set already ?
     */
     var $searchModeFlag = false;
@@ -410,6 +416,60 @@ class Search_Mnogosearch {
     } // end func setHttpParameter
 
     /**
+     * Set additional result fields.
+     * Additional fields can be defined by the "Section" Parameter
+     * in the indexer.conf of mnoGoSearch. 
+     * 
+     * @param array     The names of the additional result fields.
+     * @access public
+     * @return void
+     */
+    function setResultFields($fields = array ()) 
+    {
+        if (is_array($fields)) {
+            $this->_fields = $fields;
+        }
+    } // end func setResultFields
+    
+    /**
+     * Set the weight factors for Additional fields,  
+     * which can be defined by the "Section" Parameter
+     * in the indexer.conf of mnoGoSearch. 
+     * 
+     * e.g.: 
+     * $search->setSectionWeights(array(
+     *     1 => '1',   // body
+     *     2 => '2',   // title
+     *     3 => '2',   // keywords
+     *     5 => 'A'    // Organization (custom) 
+     * ));
+     *
+     * The factor value is a string of hex digits [0-F].
+     * 
+     * @param array     The weight factors for the 
+     *                  additional result fields.
+     * @access public
+     * @return void
+     */
+    function setSectionWeights($weights = array()) {
+        if (is_array($weights)) {
+            $wf = array();
+            foreach ($weights as $section => $weight) {
+                $wf[(int) $section] = $weight;
+            }
+            $str = '';
+            for ($index = 255; $index > 0; $index--) {
+                if (isset($wf[$index])) {
+                    $str .= $wf[$index];
+                } else {
+                    $str .= '0';
+                }
+            }
+            $this->setParameter(UDM_PARAM_WEIGHT_FACTOR,$str);
+        }
+    } // end func setSectionWeights
+    
+    /**
      * Change the http parameter names
      * 
      * @param array     The names of the http parameters.
@@ -585,7 +645,12 @@ class Search_Mnogosearch {
             $row['desc']    = udm_get_res_field($res, $i, UDM_FIELD_DESC);
             $row['crc']     = udm_get_res_field($res, $i, UDM_FIELD_CRC);
             $row['siteid']  = udm_get_res_field($res, $i, UDM_FIELD_SITEID);
-            $row['persite'] = udm_get_res_field_ex($res, $i, "PerSite");
+            $row['persite'] = udm_get_res_field_ex($res, $i, "PerSite"); 
+            if (!empty($this->_fields)) {
+                foreach ($this->_fields as $field) { 
+                 $row[$field] = udm_get_res_field_ex($res, $i, $field);
+                }
+            }  
             $result['rows'][] = $row;
             unset ($row);
         }
