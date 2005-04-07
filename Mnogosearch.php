@@ -120,16 +120,6 @@ define('UDM_PARAM_DATE_FORMAT', 'DateFormat');
 class Search_Mnogosearch {
 
     /**
-    * DSN style DB address
-    */
-    var $DBAddr = '';
-
-    /**
-    * DB Mode (single, multi, crc, crc-multi...)
-    */
-    var $DBMode = 'single';
-
-    /**
     * Add wildcards automatically to search limits by url
     * @access private
     */
@@ -294,32 +284,19 @@ class Search_Mnogosearch {
     /**
     * Creates a new instance of this class.
     *
-    * @param  string                DSN to your database
-    * @param  string               (optional) Fill this one if you 
-    *    want to keep the old API style
+    * @param  string | array        DSN(s) to your database(s). 
+    *                               e.g. 'mysql://user:password@localhost/database/?dbmode=multi'
     * @param  array                 Presets for mnogosearch agent
     * @return Search_Mnogosearch    new object of this class.
     * @access public
     */
-    function connect($DBAddr, $DBMode = '', $params = array()) 
+    function connect($DBAddr, $params = array()) 
     {
         @ $obj = & new Search_Mnogosearch();
-        if (preg_match(
-                '/(.*)\?dbmode=(single|multi|blob|crc|crc-multi|cache)$/', 
-                $DBAddr, $match)) {
-            $obj->DBAddr = $match[1];
-            $obj->DBMode = $match[2];
-        } elseif ($DBAddr != '' && $DBMode != '') {
-            $obj->DBAddr = $DBAddr;
-            $obj->DBMode = $DBMode;
+        if (!is_array($DBAddr)) {
+           $DBAddr = array($DBAddr);
         }
-        else {
-            return PEAR::raiseError(
-                'Missing parameters DBAddr or DBMode to start search.', 
-                SEARCH_MNOGOSEARCH_ERROR, PEAR_ERROR_RETURN);
-        }
-
-        $obj->agent = udm_alloc_agent($obj->DBAddr.'?dbmode='.$obj->DBMode);
+        $obj->agent = udm_alloc_agent_array($DBAddr);
 
         // Set agent parameters
         foreach ($params as $key => $value) {
@@ -574,23 +551,20 @@ class Search_Mnogosearch {
 
         $this->query = $this->_parseQuery($query);
         udm_set_agent_param($this->agent, UDM_PARAM_QUERY, $this->query);
-        $queryString = '';
-        if ($queryString == '') {
-            if (isset($_SERVER['QUERY_STRING'])) {
-                $queryString = $_SERVER['QUERY_STRING'];
-            } elseif (isset($_SERVER['argv'][0])) {
-                $queryString = $_SERVER['argv'][0];
-            }
-            udm_set_agent_param($this->agent, UDM_PARAM_QSTRING, $queryString);
+        if (isset($_SERVER['QUERY_STRING'])) {
+            $queryString = $_SERVER['QUERY_STRING'];
+        } elseif (isset($_SERVER['argv'][0])) {
+            $queryString = $_SERVER['argv'][0];
         }
-
+        udm_set_agent_param($this->agent, UDM_PARAM_QSTRING, $queryString);
+        
         if (!$this->searchModeFlag) {
             // Default search mode is ANY
             udm_set_agent_param(
                 $this->agent, UDM_PARAM_SEARCH_MODE, UDM_MODE_ANY);
         }
 
-        $res = udm_find($this->agent, $query);
+        $res = udm_find($this->agent, $this->query);
         if (($error = udm_error($this->agent)) != '') {
             udm_free_res($res);
             return PEAR::raiseError(
