@@ -116,7 +116,7 @@ class Search_Mnogosearch_Renderer_Default extends Search_Mnogosearch_Renderer
      * @access   private
      */
     var $_pagerLinkTemplate = 
-        "\n\t<td width=\"5%\"><font size=\"-1\"><b><a href=\"{url}\">{name}</a></b></font>&nbsp;</td>";
+        "\n\t<td style='white-space:nowrap' ><font size=\"-1\"><b><a href=\"{url}\">{name}</a></b></font>&nbsp;</td>";
 
     /**
      * No link Template string for the pager
@@ -124,7 +124,7 @@ class Search_Mnogosearch_Renderer_Default extends Search_Mnogosearch_Renderer
      * @access   private
      */
     var $_pagerNoLinkTemplate = 
-        "\n\t<td width=\"1%\"><font size=\"-1\">{name}</font>&nbsp;</td>";
+        "\n\t<td><font size=\"-1\">{name}</font>&nbsp;</td>";
 
     /**
      * @access  private
@@ -249,12 +249,12 @@ class Search_Mnogosearch_Renderer_Default extends Search_Mnogosearch_Renderer
         if ($curPage != $pages['firstpage']) {
             $str = str_replace(
                 '{url}', $pages['firstpageurl'], $this->_pagerLinkTemplate);
-            $str = str_replace('{name}', "First", $str);
+            $str = str_replace('{name}', '<<&nbsp;', $str);
             $htmlstr .= $str;
         } 
         if ($pages['prev'] != "") {
             $str = str_replace('{url}', $pages['prev'], $this->_pagerLinkTemplate);
-            $str = str_replace('{name}', "Previous", $str);
+            $str = str_replace('{name}', '<&nbsp;', $str);
             $htmlstr .= $str;
         } 
         foreach ($pages['pages'] as $pgnum => $link) {
@@ -268,12 +268,12 @@ class Search_Mnogosearch_Renderer_Default extends Search_Mnogosearch_Renderer
         }
         if ($pages['next'] != "") {
             $str = str_replace('{url}', $pages['next'], $this->_pagerLinkTemplate);
-            $str = str_replace('{name}', "Next", $str);
+            $str = str_replace('{name}', '&nbsp;>', $str);
             $htmlstr .= $str;
         } 
         if ($curPage != $pages['lastpage']) {
             $str = str_replace('{url}', $pages['lastpageurl'], $this->_pagerLinkTemplate);
-            $str = str_replace('{name}', "Last", $str);
+            $str = str_replace('{name}', '&nbsp;>>', $str);
             $htmlstr .= $str;
         } 
         return $htmlstr;

@@ -18,7 +18,7 @@
 // $Id$
 
 /**
- * This File contains the class Search_Mnogosearch_Renderer_Default.
+ * This File contains the class Search_Mnogosearch_Renderer_Sigma.
  * @package  Search_Mnogosearch
  * @author   Gerrit Goetsch <goetsch@cross-solution.de>
  */
@@ -240,7 +240,7 @@ class Search_Mnogosearch_Renderer_Sigma extends Search_Mnogosearch_Renderer
         $this->_http_parameters = $agent->_http_parameters;
 
         $this->_form = & new HTML_QuickForm('search', 'GET');
-        $this->_form->addElement('text', $this->_http_parameters['query'], _("Volltextsuche"), array('maxlength' => '200', 'class' => 'formFieldLong'));
+        $this->_form->addElement('text', $this->_http_parameters['query'], _("Full text search"), array('maxlength' => '200', 'class' => 'formFieldLong'));
         $this->_form->addElement('submit', 'button', 'Search');
         $this->_form->addElement('checkbox', 'group', _("Group"), 'Group by site');
 
