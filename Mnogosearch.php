@@ -37,7 +37,8 @@ require_once 'PEAR.php';
 $GLOBALS['_SEARCH_MNOGOSEARCH_PARAMETERS'] = array(
     'pagesize'        => 20, 
     'pagenumber'      => 0,
-    'queryParameter'  => 'q', 
+    'queryParameter'  => 'q',
+    'suggest'         => 'yes',
     'mode'            => array(
         'any'     => 'UDM_MODE_ANY', 
         'bool'    => 'UDM_MODE_BOOL', 
@@ -96,8 +97,12 @@ define('SEARCH_MNOGOSEARCH_INFO_LAST_DOC', 'last_doc');
 /** result info for found */
 define('SEARCH_MNOGOSEARCH_FOUND', 'found');
 
-/** missing udm parameter */
+/** 
+* missing udm parameter 
+* used by Udm_get_parameter_ex
+**/
 define('UDM_PARAM_DATE_FORMAT', 'DateFormat');
+define('UDM_PARAM_SUGGEST'    , 'suggest');
 
 /**
  * MnogoSearch Wrapper.
@@ -123,23 +128,28 @@ class Search_Mnogosearch {
     * Add wildcards automatically to search limits by url
     * @access private
     */
-    var $_autoWild = true;
+    private $_autoWild = true;
 
     /**
     * Should the query be parsed automatically
     * @access private
     */
-    var $_autoParse = true;
+    private $_autoParse = true;
     /**
     * Number of rows to display per page
     * @access private
     */
-    var $_resultsPerPage = 20;
+    private $_resultsPerPage = 20;
     /**
     * Current page number
     * @access private
     */
-    var $_pageNumber = 0;
+    private $_pageNumber = 0;
+    /**
+    * holds parameters
+    * @access private
+    */
+    private $params = array();
 
     /**
     * Array of words from the query
@@ -150,19 +160,19 @@ class Search_Mnogosearch {
     * Beginning HTML tag for word highlight
     * @access private
     */
-    var $_hlbeg = '<strong>';
+    private $_hlbeg = '<strong>';
 
     /**
     * Ending HTML tag for word highlight
     * @access private
     */
-    var $_hlend = '</strong>';
+    private $_hlend = '</strong>';
 
     /**
     * Additional fields
     * @access private
     */
-    var $_fields = array();
+    private $_fields = array();
     
     /**
     * Is the search mode set already ?
@@ -175,7 +185,13 @@ class Search_Mnogosearch {
     var $query = '';
 
     /**
+    * @access private
+    **/
+    private $_suggest;
+    
+    /**
     * Mnogosearch Agent object
+    * @access private
     */
     var $agent;
 
@@ -217,6 +233,7 @@ class Search_Mnogosearch {
         'remoteaddress'    => UDM_PARAM_REMOTE_ADDR, 
         'query'            => UDM_PARAM_QUERY, 
         'siteid'           => UDM_PARAM_SITEID, 
+        'suggest'          => UDM_PARAM_SUGGEST,
         'resultlimits'     => UDM_PARAM_RESULTS_LIMIT, 
         'found'            => UDM_PARAM_FOUND, 
         'numberrows'       => UDM_PARAM_NUM_ROWS, 
@@ -257,6 +274,7 @@ class Search_Mnogosearch {
         'wordmatch'=> 'wordmatch',
         'type'     => 'type',
         'sortorder'=> 'sortorder',
+        'suggest'  => 'suggest',
         'weightfactor' => 'weightfactor'
     );
     
@@ -314,6 +332,7 @@ class Search_Mnogosearch {
     function setParameters($params = array()) 
     {
         foreach ($params as $key => $value) {
+            $this->params[$key]=$value;
             $this->setParameter($key, $value);
         }
     } // end func setParameters
@@ -487,6 +506,7 @@ class Search_Mnogosearch {
                 $this->searchModeFlag = true;
                 break;
             case UDM_PARAM_DATE_FORMAT :
+            case UDM_PARAM_SUGGEST:
                 return $this->_setParameter_ex($name, $value);
                 break;
         }
@@ -511,7 +531,7 @@ class Search_Mnogosearch {
      * @return returns true if parameter was set
      * @access private
      */
-    function _setParameter_ex($name, $value) 
+    private function _setParameter_ex($name, $value) 
     {
         $constant = $name;
         if (defined($value)) {
@@ -573,6 +593,13 @@ class Search_Mnogosearch {
         $found = udm_get_res_param($res, UDM_PARAM_FOUND);
         $result = array();
         if (!$found) {
+            if (strtolower($this->params[ UDM_PARAM_SUGGEST ])=='yes') {
+                if (Udm_Api_Version() >= 30233) {
+                    $this->_suggest=Udm_Get_Agent_Param_Ex($this->agent,'WS');
+                } else {
+                    // log something for debugging
+                }
+            }
             udm_free_res($res);
             return false;
         } else {
@@ -764,7 +791,7 @@ class Search_Mnogosearch {
             udm_add_search_limit($this->agent, $constant, $value);
         }
     } // end func setLimit
-
+    
     /**
      * Parses the query to make it usable by mnogosearch
      * Converts boolean operators and clean the query
