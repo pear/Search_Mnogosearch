@@ -955,6 +955,14 @@ class Search_Mnogosearch {
         }
         $renderer->finishForm($this);
     } // end func accept
+    
+    function getSuggest(){
+        if (empty($this->_suggest)){
+            return false;
+        } else {
+            return $this->_suggest;
+        }
+    }
 
     /**
      * Returns an HTML version of the result
