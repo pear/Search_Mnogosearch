@@ -9,8 +9,8 @@
 require_once 'Search/Mnogosearch.php';
 
 // define the DNS to mnogosearch
-// define('DSN_MNOGOSEARCH', 'mysql://user:password@localhost/database');
-include 'config.php';
+// define('DSN_MYSQL_MNOGOSEARCH', 'mysql://user:password@localhost/database');
+include '../../config.php';
 
 // some parameters
 $params = array ();
@@ -25,7 +25,7 @@ $params['dateformat']       = "%d-%m-%y";
 $params['hlbeg']            = '<font color="#003300"><b>';
 $params['hlend']            = '</b></font>';
 
-$search = Search_Mnogosearch::connect(DSN_MNOGOSEARCH."/?dbmode=multi");
+$search = Search_Mnogosearch::connect(DSN_MYSQL_MNOGOSEARCH."/?dbmode=multi");
 
 // set the parameters
 $search->setParameters($params);

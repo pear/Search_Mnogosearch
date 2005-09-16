@@ -12,6 +12,7 @@ print "
 
 print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=1\">Example with default Renderer</a><br/>\n";
 print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=2\">Example with Sigma Renderer</a><br/>\n";
+print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=3\">Example with IT Renderer</a><br/>\n";
 print "<a href=\"http://ohrwurm.net\">german Jobsearch Engine</a><br/>\n";
 
 if (isset($_GET['demo'])) {
@@ -40,6 +41,16 @@ if ($demo==2) {
     } else { 
         print "<br><b>Source of sigma-example.php</b><table width=\"100%\" class=\"source\"><tr><td width=\"100%\" valign=\"top\">";
         highlight_file('sigma-example.php');
+        print "</td></tr></table>";
+    }
+}
+if ($demo==3) {
+    include_once('it-example.php');
+    if (!isset($_GET['show'])) {
+        print "<a href=\"".$_SERVER['SCRIPT_NAME']."?demo=3&amp;show=1\">show source</a><br/>\n";
+    } else { 
+        print "<br><b>Source of it-example.php</b><table width=\"100%\" class=\"source\"><tr><td width=\"100%\" valign=\"top\">";
+        highlight_file('it-example.php');
         print "</td></tr></table>";
     }
 }

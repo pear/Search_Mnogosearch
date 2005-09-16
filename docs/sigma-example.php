@@ -9,15 +9,15 @@
 */
 require_once 'Search/Mnogosearch.php';
 require_once 'Search/Mnogosearch/Renderer/Sigma.php';
-
 require_once 'HTML/QuickForm.php';
 require_once 'HTML/QuickForm/Renderer/ITStatic.php';
 require_once 'HTML/Template/Sigma.php';
+
 require_once 'Pager/Pager.php';
 
 // define the DNS to mnogosearch
-// define('DSN_MNOGOSEARCH', 'mysql://user:password@localhost/database');
-include 'config.php';
+// define('DSN_MYSQL_MNOGOSEARCH', 'mysql://user:password@localhost/database');
+include '../../config.php';
 
 $tpl = & new HTML_Template_Sigma(dirname(__FILE__).'/renderers/templates/');
 $tpl->loadTemplateFile('search.html', false, true);
@@ -29,7 +29,9 @@ $params = array ();
 $params['excerptsize']      = "400";
 $params['excerptpadding']   = "64";
 $params['pagesize']         = $perPage;
-$params['mode']             = 'UDM_MODE_ALL';
+$params['mode']             = UDM_MODE_ALL;
+$params['wordmatch']        = UDM_MATCH_WORD;
+$params['synonym']         = '../../synonym/german.syn';
 $params['sortorder']        = 'DRP';
 $params['detectclones']     = 1; 
 $params['cachemode']        = 0; 
@@ -37,11 +39,14 @@ $params['crosswords']       = 0;
 $params['minwordlength']    = 2;
 $params['charset']          = "iso-8859-1";
 $params['dateformat']       = "%d-%m-%y";
+$params['remotecharset']    = "utf-8";
+$params['suggest']          = "yes";
+
 
 // Limits
 $limits = array ();
 // create a new Search_Mnogosearch Object    
-$search = Search_Mnogosearch::connect(DSN_MNOGOSEARCH."/?dbmode=multi");
+$search = Search_Mnogosearch::connect( DSN_MYSQL_MNOGOSEARCH."/?dbmode=multi");
 // set the http parameters if you want.
 $search->setHttpParameters(array (
     'page'    => 'page', 
