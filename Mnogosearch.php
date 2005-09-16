@@ -332,7 +332,6 @@ class Search_Mnogosearch {
     function setParameters($params = array()) 
     {
         foreach ($params as $key => $value) {
-            $this->params[$key]=$value;
             $this->setParameter($key, $value);
         }
     } // end func setParameters
@@ -491,18 +490,23 @@ class Search_Mnogosearch {
         $name = $this->_getUdmParameter($param);
         switch ($name) {
             case UDM_PARAM_PAGE_SIZE :
+                $this->params[ UDM_PARAM_PAGE_SIZE ] = (int) $value;
                 $this->_resultsPerPage = (int) $value;
                 break;
             case UDM_PARAM_PAGE_NUM :
+                $this->params[ UDM_PARAM_PAGE_NUM ] = (int) $value;
                 $this->_pageNumber = (int) $value;
                 break;
             case UDM_PARAM_HLBEG :
+                $this->params[ UDM_PARAM_HLBEG ] = $value;
                 $this->_hlbeg = $value;
                 break;
             case UDM_PARAM_HLEND :
+                $this->params[ UDM_PARAM_HLEND ] = $value;
                 $this->_hlend = $value;
                 break;
             case UDM_PARAM_SEARCH_MODE :
+                $this->params[ UDM_PARAM_SEARCH_MODE ] = $value;            
                 $this->searchModeFlag = true;
                 break;
             case UDM_PARAM_DATE_FORMAT :
@@ -515,6 +519,7 @@ class Search_Mnogosearch {
             $value = constant($value);
         }
         $error = udm_set_agent_param($this->agent, $constant, $value);
+
         if (!$error) {
             return PEAR::raiseError(
                 "Error while setting '$constant' parameter.", 
@@ -543,6 +548,7 @@ class Search_Mnogosearch {
                 "Error while setting '$constant' parameter.", 
                 SEARCH_MNOGOSEARCH_ERROR, PEAR_ERROR_RETURN);
         }
+        $this->params[ $constant ] = $value;            
         return true;
     } // end func setParameter_ex
 
@@ -585,6 +591,7 @@ class Search_Mnogosearch {
         }
 
         $res = udm_find($this->agent, $this->query);
+        
         if (($error = udm_error($this->agent)) != '') {
             udm_free_res($res);
             return PEAR::raiseError(
@@ -592,6 +599,7 @@ class Search_Mnogosearch {
         }
         $found = udm_get_res_param($res, UDM_PARAM_FOUND);
         $result = array();
+
         if (!$found) {
             if (strtolower($this->params[ UDM_PARAM_SUGGEST ])=='yes') {
                 if (Udm_Api_Version() >= 30233) {
@@ -956,6 +964,12 @@ class Search_Mnogosearch {
         $renderer->finishForm($this);
     } // end func accept
     
+    /**
+     * Returns word suggestions
+     * 
+     * @return   string   Word suggestions	
+     * @access   public
+     */
     function getSuggest(){
         if (empty($this->_suggest)){
             return false;
