@@ -101,9 +101,9 @@ define('SEARCH_MNOGOSEARCH_FOUND', 'found');
 * missing udm parameter 
 * used by Udm_get_parameter_ex
 **/
-define('UDM_PARAM_DATE_FORMAT', 'DateFormat');
-define('UDM_PARAM_SUGGEST'    , 'suggest');
-
+define('UDM_PARAM_DATE_FORMAT',          'DateFormat');
+define('UDM_PARAM_SUGGEST',              'suggest');
+define('UDM_PARAM_DEFAULT_CONTENT_TYPE', 'DefaultContentType');
 /**
  * MnogoSearch Wrapper.
  *
@@ -202,6 +202,7 @@ class Search_Mnogosearch {
     var $_udm_parameter_mapping = array(
         'pagenumber'       => UDM_PARAM_PAGE_NUM, 
         'synonym'          => UDM_PARAM_SYNONYM, 
+        'defaultcontenttype' => UDM_PARAM_DEFAULT_CONTENT_TYPE,
         'detectclones'     => UDM_PARAM_DETECT_CLONES, 
         'cachemode'        => UDM_PARAM_CACHE_MODE, 
         'crosswords'       => UDM_PARAM_CROSS_WORDS, 
@@ -510,6 +511,7 @@ class Search_Mnogosearch {
                 $this->searchModeFlag = true;
                 break;
             case UDM_PARAM_DATE_FORMAT :
+            case UDM_PARAM_DEFAULT_CONTENT_TYPE:
             case UDM_PARAM_SUGGEST:
                 return $this->_setParameter_ex($name, $value);
                 break;
