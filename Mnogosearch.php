@@ -218,7 +218,8 @@ class Search_Mnogosearch {
         'trackmode'        => UDM_PARAM_TRACK_MODE, 
         'phrasemode'       => UDM_PARAM_PHRASE_MODE, 
         'localcharset'     => UDM_PARAM_LOCAL_CHARSET, 
-        'remotecharset'    => UDM_PARAM_BROWSER_CHARSET, 
+        'remotecharset'    => UDM_PARAM_BROWSER_CHARSET,
+        'fieldcharset'     => UDM_FIELD_CHARSET,
         'stoptable'        => UDM_PARAM_STOP_TABLE, 
         'stopfile'         => UDM_PARAM_STOP_FILE, 
         'weightfactor'     => UDM_PARAM_WEIGHT_FACTOR, 
@@ -521,6 +522,11 @@ class Search_Mnogosearch {
             $value = constant($value);
         }
         $error = udm_set_agent_param($this->agent, $constant, $value);
+	
+	//udm_set_agent_param($this->agent, UDM_PARAM_BROWSER_CHARSET, "utf-8"); // FIXME
+	//udm_set_agent_param($this->agent, UDM_PARAM_LOCAL_CHARSET, "utf-8"); // FIXME
+	//udm_set_agent_param($this->agent, UDM_PARAM_CHARSET, "utf-8"); // FIXME
+	//udm_set_agent_param($this->agent, UDM_FIELD_CHARSET, "utf-8"); // FIXME
 
         if (!$error) {
             return PEAR::raiseError(
