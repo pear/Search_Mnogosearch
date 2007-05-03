@@ -314,10 +314,20 @@ class Search_Mnogosearch {
     {
         @ $obj = & new Search_Mnogosearch();
         if (!is_array($DBAddr)) {
+           if (isset($params['trackmode']) && (strtolower($params['trackmode'])=="yes" || $params['trackmode']==1)){
+              $DBAddr.="&trackquery";
+           }
            $DBAddr = array($DBAddr);
+        }else{
+           if (isset($params['trackmode']) && (strtolower($params['trackmode'])=="yes" || $params['trackmode']==1)){
+              foreach($DBAddr as $dsn){
+                $array[]=$dsn."&trackquery";
+              }
+              $DBAddr=$array;
+           }
         }
         $obj->agent = udm_alloc_agent_array($DBAddr);
-
+        
         // Set agent parameters
         foreach ($params as $key => $value) {
             $obj->setParameter($key, $value);
@@ -511,6 +521,13 @@ class Search_Mnogosearch {
                 $this->params[ UDM_PARAM_SEARCH_MODE ] = $value;            
                 $this->searchModeFlag = true;
                 break;
+            case UDM_PARAM_TRACK_MODE:
+                if (strtolower($value)=="yes" || $value==1){
+                    Udm_Set_Agent_Param($this->agent,UDM_PARAM_TRACK_MODE,UDM_ENABLED);
+                } else {
+                    Udm_Set_Agent_Param($this->agent,UDM_PARAM_TRACK_MODE,UDM_DISABLED);
+                }
+                break;                  
             case UDM_PARAM_DATE_FORMAT :
             case UDM_PARAM_DEFAULT_CONTENT_TYPE:
             case UDM_PARAM_SUGGEST:
