@@ -26,6 +26,7 @@
  
 /**
  * Requires PEAR
+ * TODO// is it really required??
  */
 require_once 'PEAR.php';
 
@@ -103,12 +104,13 @@ define('SEARCH_MNOGOSEARCH_FOUND', 'found');
 **/
 define('UDM_PARAM_DATE_FORMAT',          'DateFormat');
 define('UDM_PARAM_SUGGEST',              'suggest');
+define('UDM_PARAM_FAST_LIMIT',           'fl');
 define('UDM_PARAM_DEFAULT_CONTENT_TYPE', 'DefaultContentType');
 /**
  * MnogoSearch Wrapper.
  *
- * This class has been tested with PHP 4.3 and MnogoSearch 3.2.18+
- * with MnogoSearch PHP Extension 1.91.
+ * This class has been tested with PHP 5.2 and MnogoSearch 3.3.3+
+ * and bundled PHP Extension 1.91.
  *
  * It is intended to be used in applications
  * where data needs to be separated from template and display.
@@ -122,6 +124,7 @@ define('UDM_PARAM_DEFAULT_CONTENT_TYPE', 'DefaultContentType');
  * @category Search
  * @version  $Revision$
  */
+ 
 class Search_Mnogosearch {
 
     /**
@@ -154,7 +157,7 @@ class Search_Mnogosearch {
     /**
     * Array of words from the query
     */
-    var $words = array();
+    private $words = array();
 
     /**
     * Beginning HTML tag for word highlight
@@ -177,7 +180,7 @@ class Search_Mnogosearch {
     /**
     * Is the search mode set already ?
     */
-    var $searchModeFlag = false;
+    private $searchModeFlag = false;
 
     /**
     * Query words to search from $queryParameterName form variable
@@ -199,7 +202,7 @@ class Search_Mnogosearch {
     * mapping for the UDM parameters 
     * @access private
     */
-    var $_udm_parameter_mapping = array(
+    private $_udm_parameter_mapping = array(
         'pagenumber'       => UDM_PARAM_PAGE_NUM, 
         'synonym'          => UDM_PARAM_SYNONYM, 
         'defaultcontenttype' => UDM_PARAM_DEFAULT_CONTENT_TYPE,
@@ -234,6 +237,7 @@ class Search_Mnogosearch {
         'querystring'      => UDM_PARAM_QSTRING, 
         'remoteaddress'    => UDM_PARAM_REMOTE_ADDR, 
         'query'            => UDM_PARAM_QUERY, 
+        'fastlimit'        => UDM_PARAM_FAST_LIMIT, 
         'siteid'           => UDM_PARAM_SITEID, 
         'suggest'          => UDM_PARAM_SUGGEST,
         'resultlimits'     => UDM_PARAM_RESULTS_LIMIT, 
@@ -246,11 +250,12 @@ class Search_Mnogosearch {
         'lastdoc'          => UDM_PARAM_LAST_DOC
     );
 
+
     /** 
     * mapping for the UDM limit parameters 
     * @access private
     */
-    var $_udm_limit_mapping = array(
+    private $_udm_limit_mapping = array(
         'category' => UDM_LIMIT_CAT, 
         'tag'      => UDM_LIMIT_TAG, 
         'url'      => UDM_LIMIT_URL, 
@@ -277,6 +282,7 @@ class Search_Mnogosearch {
         'type'     => 'type',
         'sortorder'=> 'sortorder',
         'suggest'  => 'suggest',
+        'fl'	   => 'fl',
         'weightfactor' => 'weightfactor'
     );
     
@@ -284,11 +290,13 @@ class Search_Mnogosearch {
     * Replacments of logical operators
     * @access private
     */                                   
-    var $_query_replacements = array(
+    private $_query_replacements = array(
         'and' => array('and','And','AND','&&'),
         'or'  => array('or','Or','OR','||'),
         'not' => array('not','Not','NOT','~~')
     );
+    
+    public $configFile = null;
     
     /**
      * Constructor
@@ -298,9 +306,10 @@ class Search_Mnogosearch {
      */
     function Search_Mnogosearch() 
     {
-        
     } // end constructor
 
+
+    
     /**
     * Creates a new instance of this class.
     *
@@ -310,7 +319,7 @@ class Search_Mnogosearch {
     * @return Search_Mnogosearch    new object of this class.
     * @access public
     */
-    function connect($DBAddr, $params = array()) 
+    public static function connect($DBAddr, $params = array()) 
     {
         @ $obj = & new Search_Mnogosearch();
         if (!is_array($DBAddr)) {
@@ -327,6 +336,11 @@ class Search_Mnogosearch {
            }
         }
         $obj->agent = udm_alloc_agent_array($DBAddr);
+        
+        if (array_key_exists('configFile', $params)) {
+          $obj->configFile = $params['configFile'];
+          unset($params['configFile']);
+        }
         
         // Set agent parameters
         foreach ($params as $key => $value) {
@@ -368,7 +382,7 @@ class Search_Mnogosearch {
     * @return the UDM parameter
     * @access private
     */
-    function _getUdmParameter($param) 
+    private function _getUdmParameter($param) 
     {
         foreach ($this->_udm_parameter_mapping as $key => $value) {
             if ($key == $param) {
@@ -385,7 +399,7 @@ class Search_Mnogosearch {
     * @return the UDM limit parameter
     * @access private
     */
-    function _getUdmLimit($param) 
+    private function _getUdmLimit($param) 
     {
         foreach ($this->_udm_limit_mapping as $key => $value) {
             if ($key == $param) {
@@ -527,7 +541,10 @@ class Search_Mnogosearch {
                 } else {
                     Udm_Set_Agent_Param($this->agent,UDM_PARAM_TRACK_MODE,UDM_DISABLED);
                 }
-                break;                  
+                break;
+            case UDM_PARAM_FAST_LIMIT:
+                return $this->setFastLimit($value);
+                break;
             case UDM_PARAM_DATE_FORMAT :
             case UDM_PARAM_DEFAULT_CONTENT_TYPE:
             case UDM_PARAM_SUGGEST:
@@ -540,10 +557,6 @@ class Search_Mnogosearch {
         }
         $error = udm_set_agent_param($this->agent, $constant, $value);
 	
-	//udm_set_agent_param($this->agent, UDM_PARAM_BROWSER_CHARSET, "utf-8"); // FIXME
-	//udm_set_agent_param($this->agent, UDM_PARAM_LOCAL_CHARSET, "utf-8"); // FIXME
-	//udm_set_agent_param($this->agent, UDM_PARAM_CHARSET, "utf-8"); // FIXME
-	//udm_set_agent_param($this->agent, UDM_FIELD_CHARSET, "utf-8"); // FIXME
 
         if (!$error) {
             return PEAR::raiseError(
@@ -574,6 +587,7 @@ class Search_Mnogosearch {
                 SEARCH_MNOGOSEARCH_ERROR, PEAR_ERROR_RETURN);
         }
         $this->params[ $constant ] = $value;            
+        
         return true;
     } // end func setParameter_ex
 
@@ -600,8 +614,12 @@ class Search_Mnogosearch {
             }
         }
 
+        if ($this->configFile) {
+          $this->importConfigFile();
+        }
         $this->query = $this->_parseQuery($query);
         udm_set_agent_param($this->agent, UDM_PARAM_QUERY, $this->query);
+        udm_set_agent_param_ex($this->agent,'q', $this->query);
         if (isset($_SERVER['QUERY_STRING'])) {
             $queryString = $_SERVER['QUERY_STRING'];
         } elseif (isset($_SERVER['argv'][0])) {
@@ -612,11 +630,11 @@ class Search_Mnogosearch {
         if (!$this->searchModeFlag) {
             // Default search mode is ANY
             udm_set_agent_param(
-                $this->agent, UDM_PARAM_SEARCH_MODE, UDM_MODE_ANY);
+                $this->agent, UDM_PARAM_SEARCH_MODE, UDM_MODE_ALL);
         }
 
         $res = udm_find($this->agent, $this->query);
-        
+      
         if (($error = udm_error($this->agent)) != '') {
             udm_free_res($res);
             return PEAR::raiseError(
@@ -693,6 +711,39 @@ class Search_Mnogosearch {
         $resultSet->pageNumber = $this->_pageNumber + 1;
         return $resultSet;
     } // end func getResult
+
+
+    /**
+     * imports a mnogosearch config file
+     *
+     */
+    private function importConfigFile($configFile = null) {
+      if (is_null($configFile)) {
+        if (is_null($this->configFile))  {
+          throw new Exception('No config file set.');
+        }
+        $configFile = $this->configFile;
+      }
+      
+      if (!file_exists($configFile) || !is_readable($configFile)) {
+        throw new Exception('config file "' . $configFile . '" not found or not readable.');
+      }
+      
+      $keys= array(
+        'Section',
+        'Limit'
+      );
+      
+     
+      foreach (file($configFile) as $line) {
+        foreach ($keys as $key) {
+          if (preg_match('~^\s*' . preg_quote($key) . '~i', $line)) {
+       
+            udm_set_agent_param_ex($this->agent, $line);
+          }
+        }
+      }
+    }
 
     /**
      * Set options from the submitted form
@@ -826,6 +877,23 @@ class Search_Mnogosearch {
     } // end func setLimit
     
     /**
+     * Set fast limits in a generic fashion
+     *
+     * @param  array   list of limit names
+     * @return void
+     * @access public
+     * TODO //validate limits
+     */
+    function setFastLimit($array) 
+    {
+        if (is_array($array)) {
+            foreach ($array as $limit) {
+                $error=udm_set_agent_param_ex($this->agent, UDM_PARAM_FAST_LIMIT, $limit);
+            }
+        }
+    } // end func setFastLimit
+    
+    /**
      * Parses the query to make it usable by mnogosearch
      * Converts boolean operators and clean the query
      *
@@ -833,7 +901,7 @@ class Search_Mnogosearch {
      * @return string   clean query
      * @access private
      */
-    function _parseQuery($query) 
+    private function _parseQuery($query) 
     {
         $query = urldecode($query);
         if ($this->_autoParse) {
@@ -888,7 +956,7 @@ class Search_Mnogosearch {
      * Process required http parameter
      * @access private
      */
-    function _processParameters() 
+    private function _processParameters() 
     {
         // pagenumber
         $this->_processParameter('pagenumber', 'page');
@@ -928,7 +996,7 @@ class Search_Mnogosearch {
      * @return void
      * @access private
      */
-    function _processParameter($param, $name) 
+    private function _processParameter($param, $name) 
     {
         if (isset($_POST[$this->_http_parameters[$name]])) {
             $value = $_POST[$this->_http_parameters[$name]];
@@ -941,6 +1009,12 @@ class Search_Mnogosearch {
                 // Mnogosearch use 0 as first page
                 // and the pager 1 as first page.
                 $value --;
+            }
+            if ($name == 'sortorder') {
+                if (preg_match('/([sSrRdDpP]+):(.*)/',$value,$match)){
+                  $this->_setParameter_ex('su',$match[2]);
+                  $value=$match[1];
+                }
             }
             if (isset($GLOBALS['_SEARCH_MNOGOSEARCH_PARAMETERS'][$param][$value])) {
                 $value = $GLOBALS['_SEARCH_MNOGOSEARCH_PARAMETERS'][$param][$value];
@@ -957,7 +1031,7 @@ class Search_Mnogosearch {
      * @return void
      * @access private
      */
-    function _processLimit($param, $name) 
+    private function _processLimit($param, $name) 
     {
         if (isset($_POST[$this->_http_parameters[$name]])) {
             $value = $_POST[$this->_http_parameters[$name]];
