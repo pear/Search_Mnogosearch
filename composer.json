@@ -1,0 +1,25 @@
+{
+    "authors": [
+        {
+            "email": "goetsch@cross-solution.de",
+            "name": "Gerrit Goetsch",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "./"
+        ]
+    },
+    "description": "More info available on: http://pear.php.net/package/Search_Mnogosearch",
+    "license": "PHP License 2.02",
+    "name": "pear/search_mnogosearch",
+    "support": {
+        "issues": "http:///bugs/search.php?cmd=display&package_name[]=Search_Mnogosearch",
+        "source": "https://github.com/pear/Search_Mnogosearch"
+    },
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
